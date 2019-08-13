@@ -1,0 +1,23 @@
+.main {
+  width: 600px;
+  height: 50px;
+  margin: 30px auto;
+}
+nav {
+  display: flex;
+}
+a {
+  flex: 1;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+}
+a:focus {
+  background-color: orange;
+  color: #fff;
+}
+li {
+  cursor: pointer;
+}

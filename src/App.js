@@ -1,94 +1,75 @@
-import React, { Component,Fragment } from "react";
+import React, { Component, Fragment } from "react";
 
-class HomeInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {  
-      value: '123'
-    }
-  }
-  handleChange = (e) => {
-    this.setState({ value: e.target.value });
-  }
-  handleClick = () => {
-    this.props.addValue(this.state.value)
-  }
-  render() { 
+import { connect } from 'react-redux';
+// import { NUM_ADD } from './store/actionTypes';
+import { numAdd, numINIT, numSUB } from './store/actionCreator';
+
+
+// 加
+class AddBtn extends Component {
+  render() {
+    // console.log(this.props); 
+
     return (  
-      <div>
-        <input value={this.state.value} onChange={this.handleChange} type="text"/>
-        <button onClick={this.handleClick}>添加</button>
-      </div>
+      <button onClick={this.props.numAdd}> + </button>
     );
   }
 }
 
-class HomeList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {  
-      
-    }
-  }
+class SubBtn extends Component {
   render() { 
     return (  
-      <div>
-        <ul>
-          {
-            this.props.list.map(v => 
-              <li key={v.id}> {v.text} </li>
-              )
-          }
-        </ul>
-      </div>
+      <button onClick={this.props.numSub} > - </button>
     );
   }
 }
 
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {  
-      list: [
-        {
-          id: 0,
-          text: 'lucy'
-        },
-        {
-          id: 1,
-          text: 'tom'
-        }
-      ]
-    }
+  componentDidMount() {
+    this.props.numInit()
   }
-  handleAddValue(value) {
-    console.log(value);
-    let {list} = this.state
-    let res = list.some(v => v.text === value)
-    if(!res) {
-      list.push({
-        id: Date.now(),
-        text: value
-      })
-      this.setState({ list });
-    }
-  }
-
   render() { 
+    // console.log(this.props);
+    
     return (  
       <Fragment>
-        <HomeInput addValue={this.handleAddValue.bind(this)}></HomeInput>
-        <hr/>
-        <HomeList list={this.state.list}></HomeList>
+        <div style={ {margin: "20px auto", width: "200px"} }>
+          <AddBtn {...this.props}></AddBtn>
+          <span> 数量: {this.props.num123} </span>
+          <SubBtn {...this.props}></SubBtn>
+        </div>
       </Fragment>
     );
   }
 }
 
 
+const mapPropsToState = (state) => {
+  // console.log(state);
+  return {
+    num123: state.fruitReducer.num
+  }
+}
+
+const mapPropsToDispatch = (dispatch) => {
+  return {
+    numAdd: () => {
+      // dispatch({
+      //   type: NUM_ADD,
+      //   value: 1
+      // })
+      dispatch(numAdd())
+    },
+    numInit: () => {
+      dispatch(numINIT())
+    },
+    numSub: () => {
+      dispatch(numSUB())
+    }
+  }
+}
 
 
+export default connect(mapPropsToState, mapPropsToDispatch)(App)
 
-
-export default App;
